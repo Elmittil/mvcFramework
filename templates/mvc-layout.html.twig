@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MVC</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {# import css #}
+        {{ encore_entry_link_tags('app') }}
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;600&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <header>
+            <nav>
+                <a href="/">Home</a> |
+                <a href="/session">Session</a> |
+                <a href="/debug">Debug</a> |
+                <a href="/twig">Twig view</a> |
+                <a href="/some/where">some/where</a> |
+                <a href="/no/such/path">Show 404 example</a> |
+                <a href="/dice">Dice</a> |
+                <a href="/game21">Game 21</a>
+                <a href="/yatzee">Yatzy</a>
+            </nav>
+        </header>
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer>
+            <p>This is the footer.</p>
+        </footer>
+    </body>
+</html>
