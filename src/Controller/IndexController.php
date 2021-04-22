@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class IndexController extends AbstractController
 {
     /**
-     * @Route("/migrated-index")
+     * @Route("/")
      */
     public function migratedIndex(): Response
     {
