@@ -1,26 +1,8 @@
 {% extends "mvc-layout.html.twig" %}
 
-{% block header %}
-<nav>
-    <a href="<?= url("/") ?>">Home</a> |
-    <a href="<?= url("/session") ?>">Session</a> |
-    <a href="<?= url("/debug") ?>">Debug</a> |
-    <a href="<?= url("/twig") ?>">Twig view</a> |
-    <a href="<?= url("/some/where") ?>">some/where</a> |
-    <a href="<?= url("/no/such/path") ?>">Show 404 example</a> |
-    <a href="<?= url("/dice") ?>">Dice</a> |
-    <a href="<?= url("/game21") ?>">Game 21</a>
-    <a href="<?= url("/yatzee") ?>">Yatzy</a>
-</nav>
-{% endblock %}
-
 {% block content %}
 <h1><?= $header ?></h1>
 
 <p><?= $message ?></p>
-{% endblock %}
-
-{% block footer %}
- <p>This is the footer.</p>
 {% endblock %}
 
