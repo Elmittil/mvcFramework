@@ -2,18 +2,33 @@
 
 namespace App\Controller;
 
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Dice\DiceHand;
 
 use function Mos\Functions\{
     renderView,
     url,
-    resetGame
+    resetGame,
+    buttonRoll,
+    buttonPass
 };
 
 class Game21Controller extends AbstractController
 {
+    private $session;
+    private $request;
+    
+
+    public function __construct(SessionInterface $session)
+    {
+        $this->session = $session;
+        $this->request = Request::createFromGlobals();
+    }
+
     /**
      * @Route("/game21")
      */
@@ -24,13 +39,195 @@ class Game21Controller extends AbstractController
             "message" => "Let's play again",
         ];
 
-        $playerRolls = 0;
-        $computerRolls = 0;
-        $_SESSION['roll'] = array($playerRolls, $computerRolls);
-        $_SESSION['score'] = array();
-        $_SESSION['total'] = array(0 , 0);
-        $_SESSION['message'] = "";
+        $this->session->set('rollPlayer', 0);
+        $this->session->set('rollComputer', 0);
+        $this->session->set('score', array());
+        $this->session->set('totalPlayer', 0);
+        $this->session->set('totalComputer', 0);
+        $this->session->set('message', "");
+        
 
         return $this->render('game21.html.twig', $data); 
     }
+
+    /**
+     * @Route("/game21/play", methods={"GET", "POST"})
+     */
+    public function game21play(): Response
+    {
+        $diceQty =  $this->session->get('diceQty');
+        // $button1 = $this->request->request->get('button1');
+        // $button2 = $this->request->request->get('button2');
+
+        if (array_key_exists('button1', $_POST)) {
+            $this->buttonRoll((int)$diceQty);
+        } else if (array_key_exists('button2', $_POST)) {
+            $this->buttonPass((int)$diceQty);
+        }
+
+        $data = [
+            "header" => "GAME 21",
+        ];
+
+        return $this->render('play.html.twig', $data); 
+    }
+
+    /**
+     * @Route("/game21/set-hand",  methods={"POST"})
+     */
+    public function game21setHand(): Response
+    {
+        if (null == $this->request->request->get('diceQty')) {
+            $diceQty = 1;
+            $this->get('session')->set('diceQty', $diceQty);
+            return $this->redirectToRoute('app_game21_game21play');
+        }
+
+        $diceQty = $this->request->request->get('diceQty');
+        $this->get('session')->set('diceQty', $diceQty);
+        return $this->redirectToRoute('app_game21_game21play');
+    }
+
+    /**
+     * @Route("/game21/reset",  methods={"GET"})
+     */
+    public function game21reset(): Response
+    {
+        $this->resetGame();
+        $data = [
+            "header" => "GAME 21",
+        ];
+
+        return $this->redirectToRoute('app_game21_game21play');
+    }
+    
+    private function buttonRoll(int $diceQty): void
+    {
+        $oldTotalPlayer = $this->session->get('totalPlayer');
+        $hand = $this->setupAndRoll($diceQty);
+
+        $newTotalPLayer = $oldTotalPlayer + $hand;
+        
+        $this->session->set('rollPlayer', $hand);
+        $this->session->set('totalPlayer', $newTotalPLayer);
+
+        if ($this->checkIfOver21("COMPUTER", $newTotalPLayer)) {
+            return;
+        }
+
+        $oldTotalComputer = $this->session->get('totalComputer');
+        $newTotalComputer = $oldTotalComputer;
+
+        if ($this->shouldComputerRoll($newTotalPLayer, $oldTotalComputer)) {
+            $hand = $this->setupAndRoll($diceQty);
+            $this->session->set('rollComputer', $hand);
+            $newTotalComputer = $oldTotalComputer + $hand;
+            $this->session->set('totalComputer', $newTotalComputer);
+        }
+
+        if ($this->checkIfOver21("YOU", $newTotalComputer)) {
+            return;
+        }
+
+        if ($this->checkIf21($newTotalComputer)) {
+            return;
+        }
+    }
+
+    private function buttonPass(int $diceQty): void
+    {
+        $totalPlayer = $this->session->get('totalPlayer');
+        $totalComputer = $this->session->get('totalComputer');
+
+        $computerHands = array();
+
+        while ($totalComputer <= $totalPlayer) {
+            $hand = $this->setupAndRoll($diceQty);
+            $totalComputer = $totalComputer + $hand;
+            array_push($computerHands, $hand);
+        }
+        $this->session->set('rollComputer', implode('+', $computerHands));
+        $this->session->set('totalComputer', $totalComputer);
+
+        $url = $this->generateUrl('app_game21_game21reset');
+
+        if ($totalComputer <= 21) {
+            $message = "COMPUTER WON!!!";
+            $this->session->set('message', $message);
+
+            $newScore = $this->session->get('score');
+            array_push($newScore, ["", "x"]);
+            $this->session->set('score', $newScore);
+            return;
+        }
+
+        $message = "YOU WON!!!";
+        $newScore = $this->session->get('score');
+        $this->session->set('message', $message);
+        array_push($newScore, ["x", ""]);
+        $this->session->set('score', $newScore);
+        return;
+    }
+
+    private function resetGame()
+    {
+        $this->session->set('rollPlayer', 0);
+        $this->session->set('rollComputer', 0);
+        // $this->session->set('score', array());
+        $this->session->set('totalPlayer', 0);
+        $this->session->set('totalComputer', 0);
+        $this->session->set('message', "");
+    }
+
+    private function setupAndRoll(int $diceQty): int
+    {
+        $hand = new DiceHand($diceQty, "regular");
+        $hand->roll($diceQty);
+        $rolled =  $hand->getRollSum();
+        return $rolled;
+    }
+
+    private function shouldComputerRoll(int $playerScore, int $computerScore): bool
+    {
+        if ($computerScore < 21 && $computerScore < $playerScore) {
+            return true;
+        }
+        return false;
+    }
+
+    private function checkIfOver21(string $who, int $total): bool
+    {
+        if ($total > 21) {
+            $message = $who . " WON!!!";
+            $this->session->set('message', $message);
+
+            if ($who === "COMPUTER") {
+                $newScore = $this->session->get('score');
+                array_push($newScore, ["", "x"]);
+                $this->session->set('score', $newScore);
+            }
+            if ($who === "YOU") {
+                $newScore = $this->session->get('score');
+                array_push($newScore, ["x", ""]);
+                $this->session->set('score', $newScore);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private function checkIf21(int $total): bool
+    {
+        if ($total == 21) {
+            $message = "COMPUTER WON!!!";
+            $this->session->set('message', $message);
+
+            $newScore = $this->session->get('score');
+            array_push($newScore, ["", "x"]);
+            $this->session->set('score', $newScore);
+            return true;
+        }
+        return false;
+    }
+    
 }

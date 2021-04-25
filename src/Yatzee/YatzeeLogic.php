@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Elmittil\Yatzee;
+namespace App\Yatzee;
 
-use Elmittil\Dice\DiceHand;
+use App\Dice\DiceHand;
 
 /**
  * Class YatzeeLogic.

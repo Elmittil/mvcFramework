@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Elmittil\Yatzee;
+namespace App\Yatzee;
 
 /**
  * Class ScoreChart.

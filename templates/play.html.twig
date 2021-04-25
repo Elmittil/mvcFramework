@@ -1,0 +1,43 @@
+{% extends "mvc-layout.html.twig" %}
+
+{% block content %}
+<div class="game21-wrapper">
+    <h1 class="game-title">{{ header }}</h1>
+
+    {% if app.session.get('message') == "" %}
+        <form class="play-panel" method="POST">
+            <input type="submit" name="button1" class="roll-button" value="Roll" />
+            <input type="submit" name="button2" class="roll-button" value="Pass" />
+        </form>
+    {% else %}
+        <h1 style="color: red;">{{ app.session.get('message') }}</h1>
+        <p><a href="{{ app.request.getBaseURL() }}/game21/reset"><input type='submit' class='new-game-button' value='NEXT ROUND'/></a></p>
+    {% endif %}
+
+    <div class="game-score">
+        <p id="sum ">You rolled : {{ app.session.get('rollPlayer') }} Total: {{ app.session.get('totalPlayer') }}</p>
+        <p>Computer rolled: {{ app.session.get('rollComputer') }} Total: {{ app.session.get('totalComputer') }}</p>
+
+        <table class="rounds">
+            <tr>
+                <th>You</th>
+                <th>Computer</th>
+            </tr>
+            {% for score in app.session.get('score') %}
+                <tr>
+                    <td>{{ score.0 }}</td>
+                    <td>{{ score.1 }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+
+    <p>
+        <a href='{{ app.request.getBaseURL() }}/game21'>
+            <input type='submit' class="new-game-button" value='RESET SCORE / PLAY NEW GAME'/>
+        </a>
+    </p>
+
+</div>
+{% endblock %}

@@ -1,0 +1,178 @@
+body {
+    overflow-y: scroll;
+    width: 800px;
+    margin: 8px auto;
+    padding-left: 1em;
+    border-left: 1px solid #ccc;
+}
+
+main {
+    min-height: 500px;
+}
+
+footer {
+    border-top: 1px solid #ccc;
+    min-height: 4em;
+    text-align: center;
+}
+
+.game21-wrapper {
+    background-color: #F1FAEE;
+    min-height: 500px;
+    padding: 20px;
+    margin-top: 10px;
+    align-content: center;
+}
+
+.game-title {
+    color: #A8DADC;
+    text-align: center;
+    font-family: 'Teko', sans-serif;
+    font-weight: 700;
+    font-size: 70px;
+    margin: 20px;
+}
+
+.play-panel {
+    display: inline-block;
+    width: 100%;
+    margin: 0 30px;
+}
+
+.roll-button {
+    display: inline-block;
+    background-color: #E63946;
+    border-radius: 20px;
+    border: 3px dotted #cccccc;
+    color: #eeeeee;
+    text-align: center;
+    font-size: 40px;
+    padding: 20px;
+    width: 100%;
+    /* margin: 0 3%; */
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.new-game-button {
+    display: inline-block;
+    background-color: #457B9D;
+    border-radius: 20px;
+    border: 4px double #cccccc;
+    color: #eeeeee;
+    text-align: center;
+    font-size: 37px;
+    padding: 20px;
+    width: 90%;
+    margin: 0 3%;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.game-score {
+    margin: 20px 20%;
+    text-align: center;
+    font-family: 'Teko', sans-serif;
+    font-weight: 700;
+    color: #457B9D;
+    font-size: 30px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+
+}
+
+th,
+td {
+	padding: 15px;
+}
+
+th {
+    text-align: center;
+    background-color: #1D3557;
+    color: #F1FAEE;
+}
+
+.die-choice {
+    /* display: flex;
+    align-items: center; */
+    font-family: 'Teko', sans-serif;
+    font-weight: 700;
+    color: #457B9D;
+    font-size: 30px;
+}
+
+.radio-b {
+    margin: 0 40%;
+}
+
+.diceBox [type="checkbox" i]  {
+    display: none;
+}
+
+.diceBox {
+    padding: 0 7%;
+}
+
+.diceBox label {
+    font-family: 'Teko', sans-serif;
+    font-weight: 500;
+    color: #457B9D;
+    font-size: 20px;
+}
+
+.radio-scores {
+    margin: 10px 0 10px 40%
+}
+
+label {
+    position: relative;
+    margin: 10px;
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+  
+
+label::before {
+    display: block;
+    position: absolute;
+    text-align: center;
+    transition-duration: 0.4s;
+}
+
+label img {
+    height: 100px;
+    width: 100px;
+    transition-duration: 0.2s;
+    transform-origin: 50% 50%;
+}
+  
+:checked+label {
+    border-color: #ddd;
+}
+
+:checked+label img {
+    transform: scale(0.9);
+    background-color: red;
+    opacity: .4;
+    z-index: -1;
+}
+
+
+
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9hc3NldHMvc3R5bGVzL2FwcC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSwyQkFBMkI7QUFDL0IiLCJmaWxlIjoiYXBwLmNzcyIsInNvdXJjZXNDb250ZW50IjpbImJvZHkge1xuICAgIGJhY2tncm91bmQtY29sb3I6IGxpZ2h0Z3JheTtcbn1cbiJdLCJzb3VyY2VSb290IjoiIn0=*/

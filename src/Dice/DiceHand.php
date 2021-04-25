@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Elmittil\Dice;
+namespace App\Dice;
 
 /**
  * Class DiceHand.
