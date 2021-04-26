@@ -21,7 +21,7 @@ class Game21Controller extends AbstractController
 {
     private $session;
     private $request;
-    
+
 
     public function __construct(SessionInterface $session)
     {
@@ -45,9 +45,9 @@ class Game21Controller extends AbstractController
         $this->session->set('totalPlayer', 0);
         $this->session->set('totalComputer', 0);
         $this->session->set('message', "");
-        
 
-        return $this->render('game21.html.twig', $data); 
+
+        return $this->render('game21.html.twig', $data);
     }
 
     /**
@@ -69,7 +69,7 @@ class Game21Controller extends AbstractController
             "header" => "GAME 21",
         ];
 
-        return $this->render('play.html.twig', $data); 
+        return $this->render('play.html.twig', $data);
     }
 
     /**
@@ -94,20 +94,17 @@ class Game21Controller extends AbstractController
     public function game21reset(): Response
     {
         $this->resetGame();
-        $data = [
-            "header" => "GAME 21",
-        ];
 
         return $this->redirectToRoute('app_game21_game21play');
     }
-    
+
     private function buttonRoll(int $diceQty): void
     {
         $oldTotalPlayer = $this->session->get('totalPlayer');
         $hand = $this->setupAndRoll($diceQty);
 
         $newTotalPLayer = $oldTotalPlayer + $hand;
-        
+
         $this->session->set('rollPlayer', $hand);
         $this->session->set('totalPlayer', $newTotalPLayer);
 
@@ -148,8 +145,6 @@ class Game21Controller extends AbstractController
         }
         $this->session->set('rollComputer', implode('+', $computerHands));
         $this->session->set('totalComputer', $totalComputer);
-
-        $url = $this->generateUrl('app_game21_game21reset');
 
         if ($totalComputer <= 21) {
             $message = "COMPUTER WON!!!";
@@ -229,5 +224,4 @@ class Game21Controller extends AbstractController
         }
         return false;
     }
-    
 }

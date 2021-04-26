@@ -13,10 +13,12 @@ class IndexController extends AbstractController
      */
     public function migratedIndex(): Response
     {
-        return $this->render('migratedIndex.html.twig',
+        return $this->render(
+            'migratedIndex.html.twig',
             // body data
             [   "header" => "Index page",
                 "message" => "Hello, this is the index page, rendered as a layout.",
-            ]); 
+            ]
+        );
     }
 }

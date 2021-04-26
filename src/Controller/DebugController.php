@@ -24,15 +24,17 @@ class DebugController extends AbstractController
     {
         $baseUrl = getBaseUrl();
         $currentUrl = getCurrentUrl();
-        $routePath= getRoutePath();
+        $routePath = getRoutePath();
         // $server = $_SERVER;
-        return $this->render('debug.html.twig',
+        return $this->render(
+            'debug.html.twig',
             // body data
             [   "header" => "Debug page",
                 "baseUrl" => $baseUrl,
                 "currentUrl" => $currentUrl,
                 "routePath" => $routePath,
                 // "server" => $_SERVER,
-            ]); 
+            ]
+        );
     }
 }

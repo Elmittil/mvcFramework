@@ -15,6 +15,6 @@ class WelcomeController extends AbstractController
     {
         return $this->render('welcome.html.twig', [
             'day' => date('l')
-        ]); 
+        ]);
     }
 }

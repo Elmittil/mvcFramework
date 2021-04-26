@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Dice\DiceHand;
@@ -20,15 +21,14 @@ class YatzeeController extends AbstractController
 {
     private YatzeeLogic $logic;
     private ScoreChart $scoreChart;
-    private array $currentSession;
     private $session;
-    // private $request;
-    
+    private $request;
+
 
     public function __construct(SessionInterface $session)
     {
         $this->session = $session;
-        // $this->request = Request::createFromGlobals();
+        $this->request = Request::createFromGlobals();
     }
 
     /**
@@ -44,84 +44,95 @@ class YatzeeController extends AbstractController
             "header" => "Yatzee",
         ];
 
-        return $this->render('yatzee.html.twig', $data); 
+        return $this->render('yatzee.html.twig', $data);
     }
- 
+
     /**
      * @Route("/yatzee/play", methods={"GET", "POST"})
      */
-    public function play(): Response {
+    public function play(): Response
+    {
         $this->initialise();
         $sessionChart = $this->session->get('chart');
 
-        if (!array_key_exists('rolledValues', $this->currentSession)) {
+        if (!$this->session->has('rolledValues')) {
             $this->logic->rollHand();
             $rolledDiceValues = $this->logic->getRolledDiceValues();
-            $_SESSION['rolledValues'] = $rolledDiceValues;
+            $this->session->set('rolledValues', $rolledDiceValues);
         }
 
         $data = [
             "header" => "Yatzee",
             "chartArray" => $sessionChart,
+            "n" => 1,
         ];
-        return $this->render('play-yatzee.html.twig', $data); 
+        return $this->render('play-yatzee.html.twig', $data);
     }
 
     /**
      * @Route("/yatzee/re-roll", methods={"POST"})
      */
-    public function reroll(): Response {
+    public function reroll(): Response
+    {
 
         $this->initialise();
 
-        if ($_SESSION['rollsLeft'] > 0) {
+        if ($this->session->get('rollsLeft') > 0) {
             $this->rerollSelectedDice();
-            $_SESSION['rollsLeft'] = $_SESSION['rollsLeft'] - 1;
+            $rollsLeft = $this->session->get('rollsLeft') - 1;
+            $this->session->set('rollsLeft', $rollsLeft);
         }
-        return $this->redirectToRoute('app_yatzee_play'); 
+        return $this->redirectToRoute('app_yatzee_play');
     }
 
     /**
      * @Route("/yatzee/score", methods={"POST"})
      */
-    public function score(): Response {
+    public function score(): Response
+    {
 
         $this->initialise();
+        $rolledValues = $this->session->get('rolledValues');
 
-        $combos =  $this->logic->scorableCombos($_SESSION['rolledValues']);
+        $combos =  $this->logic->scorableCombos($rolledValues);
         $possibleScores = $this->logic->comboTotal($combos);
-        $_SESSION['possibleScores'] = $possibleScores;
-        return $this->redirectToRoute('app_yatzee_play'); 
+        $this->session->set('possibleScores', $possibleScores);
+        return $this->redirectToRoute('app_yatzee_play');
     }
 
     /**
      * @Route("/yatzee/record-score", methods={"POST"})
      */
-    public function recordScore(): Response {
+    public function recordScore(): Response
+    {
         $this->initialise();
+        $selectedScore = $this->request->request->get('selectedScore');
 
-        if (isset($_POST['selectedScore'])) {
-            $key = $_POST['selectedScore'];
-            $this->logic->setScore($key, $_SESSION['possibleScores'][$key]);
-            $_SESSION['chart'] = $this->logic->getScores();
+        if (null !== $selectedScore) {
+            $key = $selectedScore;
+            $possibleScores = $this->session->get('possibleScores');
+            $this->logic->setScore($key, $possibleScores[$key]);
+            $this->session->set('chart', $this->logic->getScores());
         }
-        unset($_SESSION['possibleScores']);
-        unset($_SESSION['rolledValues']);
-        $_SESSION['rollsLeft'] = 2;
 
-        return $this->redirectToRoute('app_yatzee_play'); 
+        $this->session->remove('possibleScores');
+        $this->session->remove('rolledValues');
+        $this->session->set('rollsLeft', 2);
+
+        return $this->redirectToRoute('app_yatzee_play');
     }
 
     /**
      * @Route("/yatzee/game-over", methods={"GET"})
      */
-    public function gameOver(): Response 
+    public function gameOver(): Response
     {
         $this->scoreChart = new ScoreChart();
         $this->uploadChart();
 
-        $_SESSION['rollsLeft'] = 2;
-        return $this->redirectToRoute('app_yatzee_play'); 
+        $this->session->set('rollsLeft', 2);
+        $this->session->remove('rolledValues');
+        return $this->redirectToRoute('app_yatzee_play');
     }
 
     private function initialise()
@@ -129,37 +140,41 @@ class YatzeeController extends AbstractController
         if ($this->session->has('chart')) {
             $chartArray = $this->session->get('chart');
             $this->scoreChart = new ScoreChart($chartArray);
-        } else {
-            $newChart = new ScoreChart();
-            $this->scoreChart = $newChart;
-        }
+            $this->logic = new YatzeeLogic($this->scoreChart->getScoreChart());
+            return;
+        } 
 
+        $newChart = new ScoreChart();
+        $this->scoreChart = $newChart;
         $this->logic = new YatzeeLogic($this->scoreChart->getScoreChart());
     }
 
 
     private function rerollSelectedDice()
     {
-        $originalRolls = $_SESSION['rolledValues'];
-        if (!isset($_POST['selectedDice'])) {
+        $originalRolls = $this->session->get('rolledValues');
+
+        if (null !== $this->request->request->get('selectedDice')) {
             return;
         }
-        $selectedDice = $_POST['selectedDice'];
+        $selectedDice = $this->request->request->get('selectedDice');
+        if (isset($selectedDice)) {
+            $newDiceQty = count($selectedDice);
+            $newDiceValues = $this->logic->reRoll($newDiceQty);
+            $ior = 0;
 
-        $newDiceQty = count($selectedDice);
-        $newDiceValues = $this->logic->reRoll($newDiceQty);
-        $ior = 0;
-
-        foreach ($selectedDice as $selected) {
-            $originalRolls[$selected - 1] = $newDiceValues[$ior];
-            $ior++;
+            foreach ($selectedDice as $selected) {
+                $originalRolls[$selected - 1] = $newDiceValues[$ior];
+                $ior++;
+            }
         }
-        $_SESSION['rolledValues'] = $originalRolls;
+        
+        $this->session->set('rolledValues', $originalRolls);
     }
 
 
     private function uploadChart()
     {
-        $_SESSION['chart'] = $this->scoreChart->getScoreChart();
+        $this->session->set('chart', $this->scoreChart->getScoreChart());
     }
 }
