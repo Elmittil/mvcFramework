@@ -154,7 +154,7 @@ class YatzeeController extends AbstractController
     {
         $originalRolls = $this->session->get('rolledValues');
 
-        if (null !== $this->request->request->get('selectedDice')) {
+        if (null == $this->request->request->get('selectedDice')) {
             return;
         }
         $selectedDice = $this->request->request->get('selectedDice');
