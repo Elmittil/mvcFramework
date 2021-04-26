@@ -22,3 +22,20 @@ npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 app
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+/build/coverage
+build/coverage.clover
+build/phpcpd
+build/phpcs
+build/phpmd
+build/phpstan
+build/phpunit
+public/.DS_Store
+src/.DS_Store
+.DS_Store
+src/.DS_Store
+src/.DS_Store
