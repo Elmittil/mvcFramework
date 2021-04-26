@@ -59,10 +59,7 @@ class ScoreChart
             if ($this->chart["Total"] >= 63) {
                 $this->chart["Bonus"] = $this->bonus;
                 $this->chart["Total"] = $this->chart["Total"] + $this->bonus;
-            }
-            //  else {
-            //     $this->chart["Bonus"] = 0;
-            // }
+            } 
         }
         return $this->chart;
     }
