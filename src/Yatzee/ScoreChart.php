@@ -28,7 +28,7 @@ class ScoreChart
                 "playsLeft" => 6
             );
             return;
-        } 
+        }
         $this->chart = $currentChart;
     }
 
@@ -59,7 +59,7 @@ class ScoreChart
             if ($this->chart["Total"] >= 63) {
                 $this->chart["Bonus"] = $this->bonus;
                 $this->chart["Total"] = $this->chart["Total"] + $this->bonus;
-            } 
+            }
         }
         return $this->chart;
     }

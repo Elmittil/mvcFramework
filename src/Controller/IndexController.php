@@ -15,7 +15,6 @@ class IndexController extends AbstractController
     {
         return $this->render(
             'migratedIndex.html.twig',
-
             [   "header" => "Symfony",
                 "message" => "This page is a framework test",
             ]

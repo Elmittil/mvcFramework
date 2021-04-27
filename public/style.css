@@ -85,16 +85,15 @@ footer {
 }
 
 table {
-	width: 100%;
-	border-collapse: collapse;
-	overflow: hidden;
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
     box-shadow: 0 0 20px rgba(0,0,0,0.1);
-
 }
 
 th,
 td {
-	padding: 15px;
+    padding: 15px;
 }
 
 th {
@@ -146,7 +145,6 @@ label {
     -ms-user-select: none;
     user-select: none;
 }
-  
 
 label::before {
     display: block;
@@ -161,7 +159,7 @@ label img {
     transition-duration: 0.2s;
     transform-origin: 50% 50%;
 }
-  
+
 :checked+label {
     border-color: #ddd;
 }

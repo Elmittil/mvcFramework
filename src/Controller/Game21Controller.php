@@ -9,14 +9,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Dice\DiceHand;
 
-use function Mos\Functions\{
-    renderView,
-    url,
-    resetGame,
-    buttonRoll,
-    buttonPass
-};
-
 class Game21Controller extends AbstractController
 {
     private $session;

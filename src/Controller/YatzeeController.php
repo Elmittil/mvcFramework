@@ -12,11 +12,6 @@ use App\Dice\GraphicDice;
 use App\Yatzee\ScoreChart;
 use App\Yatzee\YatzeeLogic;
 
-use function Mos\Functions\{
-    renderView,
-    url
-};
-
 class YatzeeController extends AbstractController
 {
     private YatzeeLogic $logic;
@@ -142,7 +137,7 @@ class YatzeeController extends AbstractController
             $this->scoreChart = new ScoreChart($chartArray);
             $this->logic = new YatzeeLogic($this->scoreChart->getScoreChart());
             return;
-        } 
+        }
 
         $newChart = new ScoreChart();
         $this->scoreChart = $newChart;
@@ -168,7 +163,7 @@ class YatzeeController extends AbstractController
                 $ior++;
             }
         }
-        
+
         $this->session->set('rolledValues', $originalRolls);
     }
 
