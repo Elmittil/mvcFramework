@@ -2,6 +2,10 @@
 #    path: /welcome
 #    controller: App\Controller\WelcomeController::homepage
 
-index:
-   path: /
-   controller: App\Controller\WelcomeController::homepage
+# index:
+#    path: /
+#    controller: App\Controller\WelcomeController::homepage
+
+# game21:
+#    path: /game21
+#    controller: App\Controller\Game21Controller::game21start
