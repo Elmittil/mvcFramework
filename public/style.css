@@ -4,6 +4,7 @@ body {
     margin: 8px auto;
     padding-left: 1em;
     border-left: 1px solid #ccc;
+    background-color: #F5F5F5;
 }
 
 main {
@@ -171,6 +172,31 @@ label img {
     z-index: -1;
 }
 
+.allbooks {
+    display: inline-grid;
+    grid-template-columns: auto auto;
+    margin-top: 50px;
+}
 
+.book {
+    /* width: 30%; */
+    margin-right: 200px;
+    margin-bottom: 40px;
+    font-family: Adobe Caslon,Georgia,Times New Roman,Times,serif;
+    font-size: 21px;
+    letter-spacing: 0;
+    line-height: 1.33;
+}
 
+.book img {
+    height: 400px;;
+    display: inline;
+}
+
+.book .title {
+    font-family: 'Libre Baskerville', serif;
+    font-weight: 700;
+    font-size: 30px;
+    /* font-family: Irvin Heading,Helvetica Neue,Helvetica,Arial,sans-serif; */
+}
 /*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9hc3NldHMvc3R5bGVzL2FwcC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSwyQkFBMkI7QUFDL0IiLCJmaWxlIjoiYXBwLmNzcyIsInNvdXJjZXNDb250ZW50IjpbImJvZHkge1xuICAgIGJhY2tncm91bmQtY29sb3I6IGxpZ2h0Z3JheTtcbn1cbiJdLCJzb3VyY2VSb290IjoiIn0=*/
