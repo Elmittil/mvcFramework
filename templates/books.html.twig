@@ -1,0 +1,14 @@
+{% extends "mvc-layout.html.twig" %}
+
+{% block content %}
+<div class="allbooks">
+    {% for book in books %}
+        <div class="book">
+            <img src='../public/img/{{ book.3 }}'>
+            <p class="title">{{ book.0 }}</p>
+            <p>Author: {{ book.2 }}</p>
+            <p>ISBN-10 {{ book.1 }}</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
