@@ -1,0 +1,94 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Menlo-Regular;\f2\fmodern\fcharset0 Courier;
+\f3\fswiss\fcharset0 ArialMT;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red0\green0\blue0;\red255\green255\blue255;
+\red249\green249\blue249;\red13\green14\blue14;\red249\green249\blue249;\red23\green25\blue28;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\csgray\c0\c0;\cssrgb\c100000\c100000\c100000;
+\cssrgb\c98039\c98039\c98039;\cssrgb\c5882\c6667\c6667;\cssrgb\c98039\c98039\c98039;\cssrgb\c11765\c12941\c14510;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 php bin/console debug:router\
+ -------------------------- -------- -------- ------ ----------------------------------- \
+  Name                       Method   Scheme   Host   Path                               \
+ -------------------------- -------- -------- ------ ----------------------------------- \
+  _preview_error             ANY      ANY      ANY    /_error/\{code\}.\{_format\}           \
+  _wdt                       ANY      ANY      ANY    /_wdt/\{token\}                      \
+  _profiler_home             ANY      ANY      ANY    /_profiler/                        \
+  _profiler_search           ANY      ANY      ANY    /_profiler/search                  \
+  _profiler_search_bar       ANY      ANY      ANY    /_profiler/search_bar              \
+  _profiler_phpinfo          ANY      ANY      ANY    /_profiler/phpinfo                 \
+  _profiler_search_results   ANY      ANY      ANY    /_profiler/\{token\}/search/results  \
+  _profiler_open_file        ANY      ANY      ANY    /_profiler/open                    \
+  _profiler                  ANY      ANY      ANY    /_profiler/\{token\}                 \
+  _profiler_router           ANY      ANY      ANY    /_profiler/\{token\}/router          \
+  _profiler_exception        ANY      ANY      ANY    /_profiler/\{token\}/exception       \
+  _profiler_exception_css    ANY      ANY      ANY    /_profiler/\{token\}/exception.css   \
+ -------------------------- -------- -------- ------ ----------------------------------- \
+\
+CLREAR CACHE\
+\cf2 \cb3 \
+\pard\pardeftab720\sl400\partightenfactor0
+
+\f1\fs26 \cf2 \expnd0\expndtw0\kerning0
+APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear\cf5 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 \
+START LOCAL SERVER \
+\
+
+\f2 \cf2 \expnd0\expndtw0\kerning0
+symfony server:start\
+\
+BOOKS commands\
+php bin/create.php Video/Art 071487759X London_Barbara video-art.jpeg\
+php bin/create.php Remember 
+\f3\fs28 \cf6 \cb4 \outl0\strokewidth0 \strokec6 0593137957
+\f2\fs24 \cf2 \cb1 \outl0\strokewidth0  Genova_Lisa remember.jpg\
+php bin/create.php The_Best_Of_Everything 
+\f3\fs28 \cf6 \cb4 \outl0\strokewidth0 \strokec6 0143035290
+\f2\fs24 \cf2 \cb1 \outl0\strokewidth0  Jaffe_Rona best-of-everything.jpg\
+php bin/create.php Tiki:_Modern_Tropical_Cocktails 
+\f3\fs28 \cf6 \cb4 \outl0\strokewidth0 \strokec6 0789335549
+\f2\fs24 \cf2 \cb1 \outl0\strokewidth0  Mustipher_Shannon tiki.jpg\
+\
+\
+//create or update an entity class\
+\pard\pardeftab720\sl400\partightenfactor0
+
+\f1\fs26 \cf7 \cb8 \outl0\strokewidth0 \strokec7 php bin/console make:entity\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f2\fs24 \cf2 \cb1 \outl0\strokewidth0 \
+
+\f0 \cf0 \kerning1\expnd0\expndtw0 //new migration (queue adjustments)\
+\pard\pardeftab720\sl400\partightenfactor0
+
+\f1\fs26 \cf7 \cb8 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec7 php bin/console make:migration\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+//submit adjustments\
+\pard\pardeftab720\sl400\partightenfactor0
+
+\f1\fs26 \cf7 \cb8 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec7 php bin/console doctrine:migrations:migrate\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+//automatically create getters and setters for manually created properties\
+\pard\pardeftab720\sl400\partightenfactor0
+
+\f1\fs26 \cf7 \cb8 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec7 php bin/console make:entity --regenerate\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+//make a new controller\
+\pard\pardeftab720\sl400\partightenfactor0
+
+\f1\fs26 \cf7 \cb8 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec7 php bin/console make:controller ProductController\
+}
