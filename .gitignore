@@ -39,3 +39,7 @@ src/.DS_Store
 .DS_Store
 src/.DS_Store
 src/.DS_Store
+migrations/Version20210428174125.php
+migrations/Version20210429120939.php
+migrations/Version20210429140236.php
+migrations/Version20210429140550.php
