@@ -23,12 +23,12 @@ class ScoresController extends AbstractController
         $scoresGame21 = $scoreRepository->showAllSortedDesc("game21");
         $allScoresGame21 = array();
         foreach ($scoresGame21 as $score) {
-        array_push($allScoresGame21, [$score->getPlayerName(), $score->getScore()]);
+            array_push($allScoresGame21, [$score->getPlayerName(), $score->getScore()]);
         }
         $scoresYatzee = $scoreRepository->showAllSortedDesc("yatzee");
         $allScoresYatzee = array();
         foreach ($scoresYatzee as $score) {
-        array_push($allScoresYatzee, [$score->getPlayerName(), $score->getScore()]);
+            array_push($allScoresYatzee, [$score->getPlayerName(), $score->getScore()]);
         }
 
         $data = [

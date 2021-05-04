@@ -59,7 +59,7 @@ class YatzeeController extends AbstractController
      */
     public function play(): Response
     {
-        
+
         $this->initialise();
         $sessionChart = $this->session->get('chart');
 
@@ -136,10 +136,10 @@ class YatzeeController extends AbstractController
     public function game21SaveScore(): Response
     {
         $playerName = $this->session->get('playerName');
-        
+
         if ($playerName === "") {
-            $playerName = "no name";
-        } 
+            $playerName = "anonymous";
+        }
         $sessionChart = $this->session->get('chart');
         $playerScore = $sessionChart["Total"];
 
@@ -147,7 +147,7 @@ class YatzeeController extends AbstractController
         $score->setPlayerName($playerName);
         $score->setScore($playerScore);
         $score->setGame("yatzee");
-        
+
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($score);
         $entityManager->flush();

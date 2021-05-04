@@ -74,8 +74,8 @@ class Game21Controller extends AbstractController
         if (null == $this->request->request->get('diceQty')) {
             $diceQty = 1;
             $this->get('session')->set('diceQty', $diceQty);
-            return $this->redirectToRoute('app_game21_game21play');
             $this->get('session')->set('playerName', $playername);
+            return $this->redirectToRoute('app_game21_game21play');
         }
 
         $diceQty = $this->request->request->get('diceQty');
@@ -99,15 +99,20 @@ class Game21Controller extends AbstractController
     public function game21SaveScore(): Response
     {
         $playerName = $this->session->get('playerName');
-        
+
         $totalScores = $this->session->get('score');
         $playerScore = $this->countScores($totalScores);
 
         $score = new Score();
-        $score->setPlayerName($playerName);
+        if ($playerName) {
+            $score->setPlayerName($playerName);
+        }
+        if (!$playerName) {
+            $score->setPlayerName("anonymous");
+        }
         $score->setScore($playerScore);
         $score->setGame("game21");
-        
+
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($score);
         $entityManager->flush();
@@ -247,13 +252,12 @@ class Game21Controller extends AbstractController
     private function countScores(array $scores): int
     {
         $playersScores = array();
-        foreach($scores as $score)
-            {
-                array_push($playersScores, $score[0]); 
-            }
+        foreach ($scores as $score) {
+                array_push($playersScores, $score[0]);
+        }
         $counts = array_count_values($playersScores);
         if (array_key_exists("x", $counts)) {
-        return $counts["x"];
+            return $counts["x"];
         }
         return 0;
     }

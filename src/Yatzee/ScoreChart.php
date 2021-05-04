@@ -10,7 +10,6 @@ namespace App\Yatzee;
 class ScoreChart
 {
     private int $bonus = 35;
-    private int $playsLeft = 6;
     private array $chart;
 
     public function __construct(array $currentChart = null)

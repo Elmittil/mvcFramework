@@ -42,25 +42,25 @@ class BookController extends AbstractController
         // actually executes the queries (i.e. the INSERT query)
         $entityManager->flush();
 
-        return new Response('Saved new book with id '.$book->getId());
+        return new Response('Saved new book with id ' . $book->getId());
     }
 
     /**
      * @Route("/book/{id}", name="book_show")
      */
-    public function show(int $id): Response
+    public function show(int $bookid): Response
     {
         $book = $this->getDoctrine()
             ->getRepository(Book::class)
-            ->find($id);
+            ->find($bookid);
 
         if (!$book) {
             throw $this->createNotFoundException(
-                'No book found for id '.$id
+                'No book found for bookid ' . $bookid
             );
         }
 
-        return new Response('Check out this great book: '.$book->getName());
+        return new Response('Check out this great book: ' . $book->getTitle());
 
         // or render a template
         // in the template, print things with {{ book.name }}
@@ -84,6 +84,5 @@ class BookController extends AbstractController
         ];
 
         return $this->render('books.html.twig', $data);
-
     }
 }

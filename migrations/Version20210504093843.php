@@ -26,10 +26,10 @@ final class Version20210504093843 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TEMPORARY TABLE __temp__score AS SELECT id, player_name, score FROM score');
+        $this->addSql('CREATE TEMPORARY TABLE __temp__score AS SELECT id, playerName, score FROM score');
         $this->addSql('DROP TABLE score');
-        $this->addSql('CREATE TABLE score (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, player_name VARCHAR(255) NOT NULL, score INTEGER NOT NULL)');
-        $this->addSql('INSERT INTO score (id, player_name, score) SELECT id, player_name, score FROM __temp__score');
+        $this->addSql('CREATE TABLE score (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, playerName VARCHAR(255) NOT NULL, score INTEGER NOT NULL)');
+        $this->addSql('INSERT INTO score (id, playerName, score) SELECT id, playerName, score FROM __temp__score');
         $this->addSql('DROP TABLE __temp__score');
     }
 }

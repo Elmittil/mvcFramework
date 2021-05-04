@@ -20,7 +20,7 @@ class Score
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $player_name;
+    private $playerName;
 
     /**
      * @ORM\Column(type="integer")
@@ -39,12 +39,12 @@ class Score
 
     public function getPlayerName(): ?string
     {
-        return $this->player_name;
+        return $this->playerName;
     }
 
-    public function setPlayerName(string $player_name): self
+    public function setPlayerName(string $playerName): self
     {
-        $this->player_name = $player_name;
+        $this->playerName = $playerName;
 
         return $this;
     }
