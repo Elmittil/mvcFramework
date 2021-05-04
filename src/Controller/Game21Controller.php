@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Dice\DiceHand;
+use App\Entity\Score;
+
+require_once __DIR__ . "/../../bin/bootstrap.php";
 
 class Game21Controller extends AbstractController
 {
@@ -48,9 +51,7 @@ class Game21Controller extends AbstractController
     public function game21play(): Response
     {
         $diceQty =  $this->session->get('diceQty');
-        // $button1 = $this->request->request->get('button1');
-        // $button2 = $this->request->request->get('button2');
-
+        echo "players naem: " . $this->session->get('playerName');
         if (array_key_exists('button1', $_POST)) {
             $this->buttonRoll((int)$diceQty);
         } else if (array_key_exists('button2', $_POST)) {
@@ -69,14 +70,17 @@ class Game21Controller extends AbstractController
      */
     public function game21setHand(): Response
     {
+        $playername = $this->request->request->get('playername');
         if (null == $this->request->request->get('diceQty')) {
             $diceQty = 1;
             $this->get('session')->set('diceQty', $diceQty);
             return $this->redirectToRoute('app_game21_game21play');
+            $this->get('session')->set('playerName', $playername);
         }
 
         $diceQty = $this->request->request->get('diceQty');
         $this->get('session')->set('diceQty', $diceQty);
+        $this->get('session')->set('playerName', $playername);
         return $this->redirectToRoute('app_game21_game21play');
     }
 
@@ -86,8 +90,30 @@ class Game21Controller extends AbstractController
     public function game21reset(): Response
     {
         $this->resetGame();
-
         return $this->redirectToRoute('app_game21_game21play');
+    }
+
+    /**
+     * @Route("/game21/save-score",  methods={"GET"})
+     */
+    public function game21SaveScore(): Response
+    {
+        $playerName = $this->session->get('playerName');
+        
+        $totalScores = $this->session->get('score');
+        $playerScore = $this->countScores($totalScores);
+
+        $score = new Score();
+        $score->setPlayerName($playerName);
+        $score->setScore($playerScore);
+        $score->setGame("game21");
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($score);
+        $entityManager->flush();
+
+        $this->resetGame();
+        return $this->redirectToRoute('app_game21_game21start');
     }
 
     private function buttonRoll(int $diceQty): void
@@ -164,6 +190,7 @@ class Game21Controller extends AbstractController
         $this->session->set('totalPlayer', 0);
         $this->session->set('totalComputer', 0);
         $this->session->set('message', "");
+        $this->session->remove('playerName');
     }
 
     private function setupAndRoll(int $diceQty): int
@@ -215,5 +242,19 @@ class Game21Controller extends AbstractController
             return true;
         }
         return false;
+    }
+
+    private function countScores(array $scores): int
+    {
+        $playersScores = array();
+        foreach($scores as $score)
+            {
+                array_push($playersScores, $score[0]); 
+            }
+        $counts = array_count_values($playersScores);
+        if (array_key_exists("x", $counts)) {
+        return $counts["x"];
+        }
+        return 0;
     }
 }
