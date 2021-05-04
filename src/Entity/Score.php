@@ -27,6 +27,11 @@ class Score
      */
     private $score;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $game;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +57,18 @@ class Score
     public function setScore(int $score): self
     {
         $this->score = $score;
+
+        return $this;
+    }
+
+    public function getGame(): ?string
+    {
+        return $this->game;
+    }
+
+    public function setGame(string $game): self
+    {
+        $this->game = $game;
 
         return $this;
     }
