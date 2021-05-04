@@ -19,6 +19,25 @@ class ScoreRepository extends ServiceEntityRepository
         parent::__construct($registry, Score::class);
     }
 
+    /**
+     * @return Score[]
+     */
+    public function showAllSortedDesc(string $game): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT s
+            FROM App\Entity\Score s
+            WHERE s.game = :game
+            ORDER BY s.score DESC
+            '
+        )->setParameter('game', $game);
+        $query->setMaxResults(10);
+        // returns an array of Product objects
+        return $query->getResult();
+    }
+
     // /**
     //  * @return Score[] Returns an array of Score objects
     //  */
