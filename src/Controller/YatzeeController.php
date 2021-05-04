@@ -11,6 +11,7 @@ use App\Dice\DiceHand;
 use App\Dice\GraphicDice;
 use App\Yatzee\ScoreChart;
 use App\Yatzee\YatzeeLogic;
+use App\Entity\Score;
 
 class YatzeeController extends AbstractController
 {
@@ -43,10 +44,22 @@ class YatzeeController extends AbstractController
     }
 
     /**
+     * @Route("/yatzee/game-setup", methods={"POST"})
+     */
+    public function gameSetup(): Response
+    {
+        $playername = $this->request->request->get('playername');
+        $this->get('session')->set('playerName', $playername);
+
+        return $this->redirectToRoute('app_yatzee_play');
+    }
+
+    /**
      * @Route("/yatzee/play", methods={"GET", "POST"})
      */
     public function play(): Response
     {
+        
         $this->initialise();
         $sessionChart = $this->session->get('chart');
 
@@ -115,6 +128,32 @@ class YatzeeController extends AbstractController
         $this->session->set('rollsLeft', 2);
 
         return $this->redirectToRoute('app_yatzee_play');
+    }
+
+     /**
+     * @Route("/yatzee/save-score",  methods={"GET"})
+     */
+    public function game21SaveScore(): Response
+    {
+        $playerName = $this->session->get('playerName');
+        
+        if ($playerName === "") {
+            $playerName = "no name";
+        } 
+        $sessionChart = $this->session->get('chart');
+        $playerScore = $sessionChart["Total"];
+
+        $score = new Score();
+        $score->setPlayerName($playerName);
+        $score->setScore($playerScore);
+        $score->setGame("yatzee");
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($score);
+        $entityManager->flush();
+
+        $this->session->remove('playerName');
+        return $this->redirectToRoute('app_yatzee_gameover');
     }
 
     /**
