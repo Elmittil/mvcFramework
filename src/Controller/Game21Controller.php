@@ -51,7 +51,7 @@ class Game21Controller extends AbstractController
     public function game21play(): Response
     {
         $diceQty =  $this->session->get('diceQty');
-        echo "players naem: " . $this->session->get('playerName');
+
         if (array_key_exists('button1', $_POST)) {
             $this->buttonRoll((int)$diceQty);
         } else if (array_key_exists('button2', $_POST)) {
