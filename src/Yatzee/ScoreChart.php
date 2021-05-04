@@ -32,18 +32,6 @@ class ScoreChart
         $this->chart = $currentChart;
     }
 
-    // private function checkIfFull(): bool
-    // {
-    //     for ($i = 0; $i < 6; $i++)
-    //     {
-    //         if (empty($this->chart[$i]))
-    //         {
-    //             return false;
-    //         }
-    //     }
-    //     return true;
-    // }
-
     public function recordScore(string $face, int $value): array
     {
         if ($this->chart[$face] == null) {
@@ -52,15 +40,17 @@ class ScoreChart
 
         $this->chart["Total"] = $this->chart["Total"] + $value;
 
-        $this->playsLeft --;
-        $this->chart["playsLeft"] = $this->playsLeft;
+        $plays = $this->chart["playsLeft"];
+        $plays = $plays - 1;
 
-        if ($this->playsLeft == 0) {
+        if ($plays == 0) {
             if ($this->chart["Total"] >= 63) {
                 $this->chart["Bonus"] = $this->bonus;
                 $this->chart["Total"] = $this->chart["Total"] + $this->bonus;
             }
         }
+
+        $this->chart["playsLeft"] = $plays;
         return $this->chart;
     }
 
