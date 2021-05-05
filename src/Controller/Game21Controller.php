@@ -29,11 +29,11 @@ class Game21Controller extends AbstractController
      */
     public function game21start(): Response
     {
-        
+
         $data = [
             "header" => "Game21",
             "message" => "Let's play again",
-            
+
         ];
 
         $this->session->set('rollPlayer', 0);
