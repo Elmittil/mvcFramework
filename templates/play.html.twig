@@ -3,7 +3,9 @@
 {% block content %}
 <div class="game21-wrapper">
     <h1 class="game-title">{{ header }}</h1>
-
+    <div class="game-score">
+        <p>{{ player }} VS Computer</p>
+    </div>
     {% if app.session.get('message') == "" %}
         <form class="play-panel" method="POST">
             <input type="submit" name="button1" class="roll-button" value="Roll" />

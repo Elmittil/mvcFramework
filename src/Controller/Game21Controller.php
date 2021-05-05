@@ -29,9 +29,11 @@ class Game21Controller extends AbstractController
      */
     public function game21start(): Response
     {
+        
         $data = [
             "header" => "Game21",
             "message" => "Let's play again",
+            
         ];
 
         $this->session->set('rollPlayer', 0);
@@ -50,6 +52,7 @@ class Game21Controller extends AbstractController
      */
     public function game21play(): Response
     {
+        $playerName = $this->session->get('playerName');
         $diceQty =  $this->session->get('diceQty');
 
         if (array_key_exists('button1', $_POST)) {
@@ -60,6 +63,7 @@ class Game21Controller extends AbstractController
 
         $data = [
             "header" => "GAME 21",
+            'player' => $playerName,
         ];
 
         return $this->render('play.html.twig', $data);
@@ -195,7 +199,6 @@ class Game21Controller extends AbstractController
         $this->session->set('totalPlayer', 0);
         $this->session->set('totalComputer', 0);
         $this->session->set('message', "");
-        $this->session->remove('playerName');
     }
 
     private function setupAndRoll(int $diceQty): int
